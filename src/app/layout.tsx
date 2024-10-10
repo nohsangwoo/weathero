@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     description: "Access accurate weather data for any location worldwide. Plan your day with our reliable forecasts and real-time updates.",
     images: [
       {
-        url: "https://weathero.ludgi/logo.png",
+        url: "https://weathero.ludgi.ai/logo.png",
         width: 1200,
         height: 630,
         alt: "WeatherNow App Interface",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "WeatherNow - Instant Weather Search & Forecast",
     description: "Find weather information for any location instantly. Get accurate forecasts, temperature, and more with WeatherNow.",
-    images: ["https://weathero.ludgi/logo.png"],
+    images: ["https://weathero.ludgi.ai/logo.png"],
   },
   robots: {
     index: true,
