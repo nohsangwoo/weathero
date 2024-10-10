@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { FaSearch, FaMapMarkerAlt, FaSun, FaMoon, FaCloud, FaWind, FaThermometerHalf, FaTint, FaCompress } from 'react-icons/fa';
+import DisplayLudgi from './components/DisplayLudgi';
 
 const WeatherApp: React.FC = () => {
   const [weather, setWeather] = useState<any>(null);
@@ -54,7 +55,7 @@ const WeatherApp: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center px-4 sm:px-6 lg:px-8 flex-col">
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -166,6 +167,7 @@ const WeatherApp: React.FC = () => {
           </motion.div>
         ) : null}
       </motion.div>
+      <DisplayLudgi />
     </div>
   );
 };
