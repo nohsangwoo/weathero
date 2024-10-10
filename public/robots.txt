@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /private/
+
+# Host
+Host: https://weathero.ludgi.ai
+
+# Sitemaps
+Sitemap: https://weathero.ludgi.ai/sitemap.xml

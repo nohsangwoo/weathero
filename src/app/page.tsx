@@ -1,101 +1,174 @@
-import Image from "next/image";
+'use client'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { motion } from 'framer-motion';
+import { FaSearch, FaMapMarkerAlt, FaSun, FaMoon, FaCloud, FaWind, FaThermometerHalf, FaTint, FaCompress } from 'react-icons/fa';
 
-export default function Home() {
+const WeatherApp: React.FC = () => {
+  const [weather, setWeather] = useState<any>(null);
+  const [city, setCity] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    getCurrentLocationWeather();
+  }, []);
+
+  const getCurrentLocationWeather = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        getWeather(position.coords.latitude, position.coords.longitude);
+      }, (error) => {
+        console.error('Error getting location:', error);
+        getWeather(37.5665, 126.9780); // 서울의 기본 좌표
+      });
+    } else {
+      getWeather(37.5665, 126.9780); // 서울의 기본 좌표
+    }
+  };
+
+  console.log(process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY)
+  const getWeather = async (lat: number, lon: number) => {
+    setLoading(true);
+    try {
+      const response = await axios.get('/weather', {
+        params: { lat, lon },
+      });
+      setWeather(response.data);
+    } catch (error) {
+      console.error('날씨 데이터 가져오기 오류:', error);
+    }
+    setLoading(false);
+  };
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.get('/weather', {
+        params: { city },
+      });
+      setWeather(response.data);
+    } catch (error) {
+      console.error('날씨 데이터 가져오기 오류:', error);
+    }
+    setLoading(false);
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-md w-full space-y-8 bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-xl"
+      >
+        <h1 className="text-4xl font-bold text-center text-white mb-8">Weather Wonderland</h1>
+        <form onSubmit={handleSearch} className="mt-8 space-y-6">
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div>
+              <input
+                type="text"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Enter city name"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </div>
+          </div>
+          <div>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              <FaSearch className="h-5 w-5 text-white mr-2" />
+              Search
+            </motion.button>
+          </div>
+        </form>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        {loading ? (
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            className="flex justify-center items-center"
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <FaSun className="h-12 w-12 text-yellow-400" />
+          </motion.div>
+        ) : weather ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="mt-8 text-white"
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <h2 className="text-3xl font-bold mb-4">{weather.name}, {weather.sys.country}</h2>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <img
+                  src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                  alt={weather.weather[0].description}
+                  className="w-16 h-16 mr-4"
+                />
+                <div>
+                  <p className="text-5xl font-bold">{Math.round(weather.main.temp)}°C</p>
+                  <p className="text-xl capitalize">{weather.weather[0].description}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-lg flex items-center justify-end">
+                  <FaThermometerHalf className="mr-2" />
+                  Feels like: {Math.round(weather.main.feels_like)}°C
+                </p>
+                <p className="text-lg flex items-center justify-end">
+                  <FaTint className="mr-2" />
+                  Humidity: {weather.main.humidity}%
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white bg-opacity-20 rounded-lg p-4"
+              >
+                <FaWind className="h-8 w-8 text-white mb-2" />
+                <p className="text-lg font-semibold">Wind</p>
+                <p className="text-2xl">{weather.wind.speed} m/s</p>
+                <p className="text-sm">Direction: {weather.wind.deg}°</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white bg-opacity-20 rounded-lg p-4"
+              >
+                <FaCloud className="h-8 w-8 text-white mb-2" />
+                <p className="text-lg font-semibold">Cloudiness</p>
+                <p className="text-2xl">{weather.clouds.all}%</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white bg-opacity-20 rounded-lg p-4"
+              >
+                <FaCompress className="h-8 w-8 text-white mb-2" />
+                <p className="text-lg font-semibold">Pressure</p>
+                <p className="text-2xl">{weather.main.pressure} hPa</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white bg-opacity-20 rounded-lg p-4"
+              >
+                <FaMapMarkerAlt className="h-8 w-8 text-white mb-2" />
+                <p className="text-lg font-semibold">Coordinates</p>
+                <p className="text-md">Lat: {weather.coord.lat}</p>
+                <p className="text-md">Lon: {weather.coord.lon}</p>
+              </motion.div>
+            </div>
+          </motion.div>
+        ) : null}
+      </motion.div>
     </div>
   );
-}
+};
+
+export default WeatherApp;
