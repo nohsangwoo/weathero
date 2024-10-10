@@ -15,7 +15,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "WeatherNow | Instant Weather Search & Forecast",
+  title: "Weathero | Instant Weather Search & Forecast",
   description: "Get real-time weather information and forecasts for any location. Easy-to-use weather search tool with accurate data.",
   keywords: [
     "weather search, local weather, weather forecast",
@@ -25,24 +25,24 @@ export const metadata: Metadata = {
     "weather alerts, climate data, weather map"
   ].join(", "),
   openGraph: {
-    title: "WeatherNow - Your Instant Weather Information Hub",
+    title: "Weathero - Your Instant Weather Information Hub",
     description: "Access accurate weather data for any location worldwide. Plan your day with our reliable forecasts and real-time updates.",
     images: [
       {
         url: "https://weathero.ludgi.ai/logo.png",
         width: 1200,
         height: 630,
-        alt: "WeatherNow App Interface",
+        alt: "Weathero App Interface",
       },
     ],
     locale: "en_US",
     type: "website",
-    siteName: "WeatherNow",
+    siteName: "Weathero",
   },
   twitter: {
     card: "summary_large_image",
-    title: "WeatherNow - Instant Weather Search & Forecast",
-    description: "Find weather information for any location instantly. Get accurate forecasts, temperature, and more with WeatherNow.",
+    title: "Weathero - Instant Weather Search & Forecast",
+    description: "Find weather information for any location instantly. Get accurate forecasts, temperature, and more with Weathero.",
     images: ["https://weathero.ludgi.ai/logo.png"],
   },
   robots: {
