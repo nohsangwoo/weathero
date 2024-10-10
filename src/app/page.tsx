@@ -26,7 +26,6 @@ const WeatherApp: React.FC = () => {
     }
   };
 
-  console.log(process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY)
   const getWeather = async (lat: number, lon: number) => {
     setLoading(true);
     try {
